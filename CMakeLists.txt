@@ -3,4 +3,4 @@ project(ParcialEj3 C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(ParcialEj3 main.c)
+add_executable(ParcialEj3 main.c Ej3.c Ej3.h)

@@ -10,9 +10,10 @@
 /* Desarrollar la función que resuelva una colisión a través
  *  de una redispersión lineal, es decir, que busque la siguiente
  *  posición disponible disponible en la tabla de hash */
+
 void redispersionLineal(TablaHashing *tabla, char *entrada, int posicion) {
    int i=1;
-    while(posicion+i<tabla->capacidad && tabla->tabla[posicion+i]==NULL){
+    while(posicion+i<tabla->capacidad && tabla->tabla[posicion+i]!=NULL){
         i++;
     }
     if(tabla->tabla[posicion+i]==NULL){
@@ -24,6 +25,8 @@ void redispersionLineal(TablaHashing *tabla, char *entrada, int posicion) {
         }
         if(tabla->tabla[i]== NULL){
             strcpy(tabla->tabla[i], entrada);
+        }else{
+            printf("No hay mas lugar\n");
         }
     }
 
@@ -31,10 +34,10 @@ void redispersionLineal(TablaHashing *tabla, char *entrada, int posicion) {
     /* agregar código */
 }
 
+
+
 /* Desarrollar la función que devuelva si existe, o no
  *  un elemento dentro de la tabla de hashing */
-
-
 
 int existe(TablaHashing *tabla, char *entrada) {
     int posicion = hash(entrada, tabla);
@@ -42,7 +45,7 @@ int existe(TablaHashing *tabla, char *entrada) {
         return 1; //Existe
     }else{
         int i=1;
-        while(i+posicion<tabla->capacidad && strcmp(tabla->tabla[i+posicion], entrada)!=0){
+        while(i+posicion!=tabla->capacidad && strcmp(tabla->tabla[i+posicion], entrada)!=0){
             i++;
         }
         if(strcmp(tabla->tabla[i+posicion], entrada)==0){

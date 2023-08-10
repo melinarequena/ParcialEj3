@@ -13,25 +13,27 @@
 
 void redispersionLineal(TablaHashing *tabla, char *entrada, int posicion) {
    int i=1;
-    while(posicion+i<tabla->capacidad && tabla->tabla[posicion+i]!=NULL){
+    while(posicion+i < tabla->tamanio && tabla->tabla[posicion+i] != NULL){
         i++;
     }
-    if(tabla->tabla[posicion+i]==NULL){
+    if(tabla->tabla[posicion+i] == NULL){
         strcpy(tabla->tabla[posicion+i], entrada);
     }else{
         i=0;
-        while(tabla->tabla[i]!= NULL && i!=posicion){
+        while(i != posicion && tabla->tabla[i] != NULL){
             i++;
         }
-        if(tabla->tabla[i]== NULL){
+        if(tabla->tabla[i] == NULL){
             strcpy(tabla->tabla[i], entrada);
-        }else{
+        }
+        /*else{
             printf("No hay mas lugar\n");
         }
+        NO ES NECESARIO UN ELSE PORQUE YA EN agregarEntrada HAY UN TABL COMPLETA
+         */
     }
 
 
-    /* agregar código */
 }
 
 
@@ -41,31 +43,32 @@ void redispersionLineal(TablaHashing *tabla, char *entrada, int posicion) {
 
 int existe(TablaHashing *tabla, char *entrada) {
     int posicion = hash(entrada, tabla);
-    if(strcmp(entrada, tabla->tabla[posicion])==0){
+    if(strcmp(entrada, tabla->tabla[posicion]) == 0){
         return 1; //Existe
     }else{
         int i=1;
-        while(i+posicion!=tabla->capacidad && strcmp(tabla->tabla[i+posicion], entrada)!=0){
+        while(i+posicion < tabla->tamanio && strcmp(tabla->tabla[i+posicion], entrada) != 0){
             i++;
         }
-        if(strcmp(tabla->tabla[i+posicion], entrada)==0){
+        if(tabla->tabla[i+posicion] != NULL && strcmp(tabla->tabla[i+posicion], entrada) == 0){
             return 1; //Existe
         }else{
             i=0;
-            while(i != posicion){
-                if(strcmp(tabla->tabla[i], entrada)==0){
+            while(i < posicion){
+                if(tabla->tabla[i] != NULL && strcmp(tabla->tabla[i], entrada) == 0){
                     return 1; //existe
                 }else{
                     i++;
                 }
             }
-            return 0;
         }
+            return 0; //no existe
     }
+}
 
     /* agregar código */
 
-}
+
 
 
 TablaHashing *newTablaHashing(int capacidad) {

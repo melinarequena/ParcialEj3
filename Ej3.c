@@ -12,28 +12,25 @@
  *  posición disponible disponible en la tabla de hash */
 
 void redispersionLineal(TablaHashing *tabla, char *entrada, int posicion) {
-   int i=1;
-    while(posicion+i < tabla->tamanio && tabla->tabla[posicion+i] != NULL){
+    int i = posicion;
+    //recorro la tabla desde (pos de hashing + 1) hasta el final
+    while(i < tabla->tamanio){
+        if(tabla->tabla[i] == NULL){
+            tabla->tabla[i] = entrada;
+            tabla->tamanio++;
+            return;
+        }
         i++;
     }
-    if(tabla->tabla[posicion+i] == NULL){
-        strcpy(tabla->tabla[posicion+i], entrada);
-    }else{
-        i=0;
-        while(i != posicion && tabla->tabla[i] != NULL){
-            i++;
-        }
+    //recorro desde pos (0) hasta (pos de hashing)
+    i = 0;
+    while(i != posicion){
         if(tabla->tabla[i] == NULL){
-            strcpy(tabla->tabla[i], entrada);
+            tabla->tabla[i] = entrada;
+            tabla->tamanio++;
         }
-        /*else{
-            printf("No hay mas lugar\n");
-        }
-        NO ES NECESARIO UN ELSE PORQUE YA EN agregarEntrada HAY UN TABL COMPLETA
-         */
+        i++;
     }
-
-
 }
 
 
@@ -42,28 +39,23 @@ void redispersionLineal(TablaHashing *tabla, char *entrada, int posicion) {
  *  un elemento dentro de la tabla de hashing */
 
 int existe(TablaHashing *tabla, char *entrada) {
-    int posicion = hash(entrada, tabla);
-    if(strcmp(entrada, tabla->tabla[posicion]) == 0){
-        return 1; //Existe
-    }else{
-        int i=1;
-        while(i+posicion < tabla->tamanio && strcmp(tabla->tabla[i+posicion], entrada) != 0){
-            i++;
+    // recorro desde (pos de hashing) hasta el final
+    int pos = hash(entrada, tabla);
+    while(pos < tabla->tamanio){
+        if(tabla->tabla[pos] != NULL && strcmp( tabla->tabla[pos], entrada) == 0){
+            return 1;
         }
-        if(tabla->tabla[i+posicion] != NULL && strcmp(tabla->tabla[i+posicion], entrada) == 0){
-            return 1; //Existe
-        }else{
-            i=0;
-            while(i < posicion){
-                if(tabla->tabla[i] != NULL && strcmp(tabla->tabla[i], entrada) == 0){
-                    return 1; //existe
-                }else{
-                    i++;
-                }
-            }
-        }
-            return 0; //no existe
+        pos++;
     }
+    // recorro desde pos (0) hasta (pos de hashing)
+    pos = 0;
+    while (pos != hash(entrada, tabla)){
+        if(tabla->tabla[pos] != NULL && strcmp(tabla->tabla[pos], entrada) == 0){
+            return 1;
+        }
+        pos++;
+    }
+    return 0;
 }
 
     /* agregar código */
@@ -76,7 +68,7 @@ TablaHashing *newTablaHashing(int capacidad) {
 
     if (aux == NULL) {
         printf("No hay memoria disponible");
-        exit -1;
+        exit (-1);
     }
 
     aux->capacidad = capacidad;
